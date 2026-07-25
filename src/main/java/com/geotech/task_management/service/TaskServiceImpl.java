@@ -57,7 +57,7 @@ public class TaskServiceImpl implements TaskService{
         }
 
         log.info("TaskServiceImpl || getTask() || Successfully Fetched: {} ", response);
-        
+
         return response;
     }
 }

@@ -54,13 +54,13 @@ public class TaskController {
     }
 
     @Operation(
-            summary = "Get Created",
-            description = "Creates a new task which may or may not be dependent on another task.",
+            summary = "Get Created Task",
+            description = "Get Created Task with Dependent Task",
             responses = {
                     @ApiResponse(
-                            responseCode = "201",
-                            description = "Task created successfully",
-                            content = @Content(schema = @Schema(implementation = GlobalResponse.class))
+                            responseCode = "200",
+                            description = "JSON Response of TaskDto",
+                            content = @Content(schema = @Schema(implementation = TaskDto.class))
                     ),
                     @ApiResponse(
                             responseCode = "400",
