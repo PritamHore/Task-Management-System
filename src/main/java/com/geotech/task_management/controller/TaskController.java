@@ -3,7 +3,6 @@ package com.geotech.task_management.controller;
 import com.geotech.task_management.dto.GlobalResponse;
 import com.geotech.task_management.dto.TaskDto;
 import com.geotech.task_management.dto.TaskResponseDto;
-import com.geotech.task_management.entity.TaskEntity;
 import com.geotech.task_management.service.TaskService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -15,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 /*
@@ -22,7 +22,7 @@ import java.util.UUID;
 @Since v1
  */
 @RestController
-@RequestMapping("/api/v1/task-controller")
+@RequestMapping("/api/v1/task")
 @Slf4j
 @RequiredArgsConstructor
 public class TaskController {
@@ -51,6 +51,30 @@ public class TaskController {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(taskService.create(taskDto));
+    }
+
+    @Operation(
+            summary = "Get All Created Task",
+            description = "Get All Created Task with Dependent Task",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "JSON Response of TaskResponseDto.",
+                            content = @Content(schema = @Schema(implementation = TaskResponseDto.class))
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Invalid input"
+                    )
+            }
+    )
+    @GetMapping("/get-all")
+    public ResponseEntity<List<TaskResponseDto>> getAllTasks(){
+        log.info("Executing:TaskController, getAllTasks()");
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(taskService.getAllTasks());
     }
 
     @Operation(

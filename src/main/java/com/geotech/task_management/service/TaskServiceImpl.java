@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -42,6 +42,15 @@ public class TaskServiceImpl implements TaskService{
                 .id(entity.getId())
                 .message("Task Created Successfully!")
                 .build();
+    }
+
+    //Not adding dependsOn as this data might not require on showing on a table.
+    @Override
+    public List<TaskResponseDto> getAllTasks() {
+        log.info("TaskServiceImpl || getAllTasks()");
+        List<TaskEntity> allTasks = taskRepository.findAll();
+        log.info("TaskServiceImpl || getAllTasks() || Fetched {} records.", allTasks.size());
+        return taskMapper.convertToEntityList(allTasks);
     }
 
     @Override

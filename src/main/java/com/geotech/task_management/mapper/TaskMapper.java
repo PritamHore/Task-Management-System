@@ -7,6 +7,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring")
 public interface TaskMapper {
 
@@ -19,5 +21,6 @@ public interface TaskMapper {
     @Mapping(target = "dependsOn", ignore = true)
     void updateEntity(TaskDto taskDto, @MappingTarget TaskEntity taskEntity);
 
-
+    @Mapping(target = "dependsOn", ignore = true)
+    List<TaskResponseDto> convertToEntityList(List<TaskEntity> allTasks);
 }
