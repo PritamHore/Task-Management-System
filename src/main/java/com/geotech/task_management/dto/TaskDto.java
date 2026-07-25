@@ -12,6 +12,6 @@ public class TaskDto {
     private String title;
     private String description;
     private TaskStatus status;
-    private TaskDto dependsOn;
+    private UUID dependsOn;
 
 }

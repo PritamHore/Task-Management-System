@@ -1,8 +1,8 @@
 package com.geotech.task_management.controller;
 
 import com.geotech.task_management.dto.GlobalResponse;
-import com.geotech.task_management.dto.TaskCreationDto;
 import com.geotech.task_management.dto.TaskDto;
+import com.geotech.task_management.dto.TaskResponseDto;
 import com.geotech.task_management.entity.TaskEntity;
 import com.geotech.task_management.service.TaskService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -35,7 +35,7 @@ public class TaskController {
             responses = {
                     @ApiResponse(
                             responseCode = "201",
-                            description = "Task created successfully",
+                            description = "Task created successfully.",
                             content = @Content(schema = @Schema(implementation = GlobalResponse.class))
                     ),
                     @ApiResponse(
@@ -45,12 +45,12 @@ public class TaskController {
             }
     )
     @PostMapping()
-    public ResponseEntity<GlobalResponse> create(@RequestBody TaskCreationDto taskCreationDto){
+    public ResponseEntity<GlobalResponse> create(@RequestBody TaskDto taskDto){
         log.info("Executing:TaskController, create()");
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(taskService.create(taskCreationDto));
+                .body(taskService.create(taskDto));
     }
 
     @Operation(
@@ -59,8 +59,8 @@ public class TaskController {
             responses = {
                     @ApiResponse(
                             responseCode = "200",
-                            description = "JSON Response of TaskDto",
-                            content = @Content(schema = @Schema(implementation = TaskDto.class))
+                            description = "JSON Response of TaskResponseDto.",
+                            content = @Content(schema = @Schema(implementation = TaskResponseDto.class))
                     ),
                     @ApiResponse(
                             responseCode = "400",
@@ -69,12 +69,36 @@ public class TaskController {
             }
     )
     @GetMapping()
-    public ResponseEntity<TaskDto> getTask(@RequestParam UUID id){
+    public ResponseEntity<TaskResponseDto> getTask(@RequestParam UUID id){
         log.info("Executing:TaskController, getTask() with ID: {}", id);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(taskService.getTask(id));
+    }
+
+    @Operation(
+            summary = "Edit Task",
+            description = "Edit Task and Handle Circular dependencies",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Task Edited Successfully.",
+                            content = @Content(schema = @Schema(implementation = GlobalResponse.class))
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Invalid input"
+                    )
+            }
+    )
+    @PutMapping()
+    public ResponseEntity<GlobalResponse> editTask(@RequestBody TaskDto taskEditDto){
+        log.info("Executing:TaskController, editTask() with ID: {}", taskEditDto);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(taskService.editTask(taskEditDto));
     }
 
 }

@@ -1,19 +1,23 @@
 package com.geotech.task_management.mapper;
 
-import com.geotech.task_management.dto.TaskCreationDto;
 import com.geotech.task_management.dto.TaskDto;
+import com.geotech.task_management.dto.TaskResponseDto;
 import com.geotech.task_management.entity.TaskEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring")
 public interface TaskMapper {
 
     @Mapping(target = "dependsOn", ignore = true)
-    TaskEntity convertToEntity(TaskCreationDto taskCreationDto);
+    TaskEntity convertToEntity(TaskDto taskCreationDto);
 
     @Mapping(target = "dependsOn", ignore = true)
-    TaskDto convertToDto(TaskEntity taskEntity);
+    TaskResponseDto convertToDto(TaskEntity taskEntity);
+
+    @Mapping(target = "dependsOn", ignore = true)
+    void updateEntity(TaskDto taskDto, @MappingTarget TaskEntity taskEntity);
 
 
 }

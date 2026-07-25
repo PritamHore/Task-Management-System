@@ -6,10 +6,12 @@ import lombok.Data;
 import java.util.UUID;
 
 @Data
-public class TaskCreationDto {
+public class TaskResponseDto {
 
+    private UUID id;
     private String title;
     private String description;
     private TaskStatus status;
-    private UUID dependsOn;
+    private TaskResponseDto dependsOn;
+
 }
