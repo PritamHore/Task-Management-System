@@ -91,7 +91,7 @@ public class TaskServiceImpl implements TaskService{
         taskUtil.checkCircularDependency(task,taskEditDto);
 
         taskMapper.updateEntity(taskEditDto, task);
-        if(task.hasDependency()){
+        if(null != taskEditDto.getDependsOn()){
             TaskEntity dependsOn = taskRepository.findById(taskEditDto.getDependsOn()).orElseThrow(
                     () -> new TaskNotFoundException("Parent Not Found.")
             );
