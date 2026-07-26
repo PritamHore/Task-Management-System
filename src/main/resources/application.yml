@@ -5,9 +5,9 @@ spring:
   application:
     name: task-management
   datasource:
-    url: jdbc:postgresql://localhost:5432/task-management-db
-    username: pritam
-    password: pritamroot
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/task-management-db}
+    username: ${DB_USERNAME:pritam}
+    password: ${DB_PASSWORD:pritamroot}
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
