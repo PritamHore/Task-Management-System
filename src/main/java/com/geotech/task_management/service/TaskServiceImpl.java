@@ -4,7 +4,6 @@ import com.geotech.task_management.dto.GlobalResponse;
 import com.geotech.task_management.dto.TaskDto;
 import com.geotech.task_management.dto.TaskResponseDto;
 import com.geotech.task_management.entity.TaskEntity;
-import com.geotech.task_management.exception.DependentTaskNotCompletedException;
 import com.geotech.task_management.exception.TaskAlreadyCompletedException;
 import com.geotech.task_management.exception.TaskNotFoundException;
 import com.geotech.task_management.mapper.TaskMapper;

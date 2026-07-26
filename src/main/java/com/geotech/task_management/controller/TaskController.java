@@ -4,11 +4,11 @@ import com.geotech.task_management.dto.GlobalResponse;
 import com.geotech.task_management.dto.TaskDto;
 import com.geotech.task_management.dto.TaskResponseDto;
 import com.geotech.task_management.service.TaskService;
-import com.geotech.task_management.util.TaskStatus;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -46,7 +46,7 @@ public class TaskController {
             }
     )
     @PostMapping()
-    public ResponseEntity<GlobalResponse> create(@RequestBody TaskDto taskDto){
+    public ResponseEntity<GlobalResponse> create(@Valid @RequestBody TaskDto taskDto){
         log.info("Executing:TaskController, create()");
 
         return ResponseEntity

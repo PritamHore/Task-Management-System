@@ -6,7 +6,6 @@ import com.geotech.task_management.entity.TaskEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
-import org.mapstruct.Mappings;
 
 import java.util.List;
 
