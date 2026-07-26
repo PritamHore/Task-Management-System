@@ -6,6 +6,7 @@ import com.geotech.task_management.entity.TaskEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
+import org.mapstruct.Mappings;
 
 import java.util.List;
 
@@ -13,14 +14,14 @@ import java.util.List;
 public interface TaskMapper {
 
     @Mapping(target = "dependsOn", ignore = true)
+    @Mapping(target = "status", ignore = true)
     TaskEntity convertToEntity(TaskDto taskCreationDto);
 
-    @Mapping(target = "dependsOn", ignore = true)
     TaskResponseDto convertToDto(TaskEntity taskEntity);
 
     @Mapping(target = "dependsOn", ignore = true)
+    @Mapping(target = "status", ignore = true)
     void updateEntity(TaskDto taskDto, @MappingTarget TaskEntity taskEntity);
 
-    @Mapping(target = "dependsOn", ignore = true)
-    List<TaskResponseDto> convertToEntityList(List<TaskEntity> allTasks);
+    List<TaskResponseDto> convertToDtoList(List<TaskEntity> allTasks);
 }

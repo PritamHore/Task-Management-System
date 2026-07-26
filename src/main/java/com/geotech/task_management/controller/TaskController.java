@@ -4,6 +4,7 @@ import com.geotech.task_management.dto.GlobalResponse;
 import com.geotech.task_management.dto.TaskDto;
 import com.geotech.task_management.dto.TaskResponseDto;
 import com.geotech.task_management.service.TaskService;
+import com.geotech.task_management.util.TaskStatus;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -123,6 +124,30 @@ public class TaskController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(taskService.editTask(taskEditDto));
+    }
+
+    @Operation(
+            summary = "Update Task Status",
+            description = "Update Task Status and check dependent methods.",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Status Updated Successfully.",
+                            content = @Content(schema = @Schema(implementation = GlobalResponse.class))
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Invalid input"
+                    )
+            }
+    )
+    @PatchMapping
+    public ResponseEntity<GlobalResponse> updateTaskStatus(@RequestParam UUID taskId){
+        log.info("Executing:TaskController, updateTaskStatus() with ID: {}",taskId);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(taskService.updateTaskStatus(taskId));
     }
 
 }

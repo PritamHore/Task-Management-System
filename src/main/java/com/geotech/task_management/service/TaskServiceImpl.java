@@ -4,9 +4,12 @@ import com.geotech.task_management.dto.GlobalResponse;
 import com.geotech.task_management.dto.TaskDto;
 import com.geotech.task_management.dto.TaskResponseDto;
 import com.geotech.task_management.entity.TaskEntity;
+import com.geotech.task_management.exception.DependentTaskNotCompletedException;
+import com.geotech.task_management.exception.TaskAlreadyCompletedException;
 import com.geotech.task_management.exception.TaskNotFoundException;
 import com.geotech.task_management.mapper.TaskMapper;
 import com.geotech.task_management.repository.TaskRepository;
+import com.geotech.task_management.util.TaskStatus;
 import com.geotech.task_management.util.TaskUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +36,9 @@ public class TaskServiceImpl implements TaskService{
             TaskEntity dependsOn = taskRepository.findById(taskCreationDto.getDependsOn()).orElseThrow(
                     () -> new TaskNotFoundException("Parent Task Not Found.")
             );
+            if(TaskStatus.DONE == dependsOn.getStatus()){
+                throw new TaskAlreadyCompletedException("Dependent task is already completed.");
+            }
             entity.setDependsOn(dependsOn);
         }
         entity = taskRepository.save(entity);
@@ -44,13 +50,12 @@ public class TaskServiceImpl implements TaskService{
                 .build();
     }
 
-    //Not adding dependsOn as this data might not require on showing on a table.
     @Override
     public List<TaskResponseDto> getAllTasks() {
         log.info("TaskServiceImpl || getAllTasks()");
         List<TaskEntity> allTasks = taskRepository.findAll();
         log.info("TaskServiceImpl || getAllTasks() || Fetched {} records.", allTasks.size());
-        return taskMapper.convertToEntityList(allTasks);
+        return taskMapper.convertToDtoList(allTasks);
     }
 
     @Override
@@ -62,7 +67,7 @@ public class TaskServiceImpl implements TaskService{
         );
 
         TaskResponseDto response = taskMapper.convertToDto(task);
-        if(null != task.getDependsOn()){
+        if(task.hasDependency()){
             TaskResponseDto dependsOn = taskMapper.convertToDto(task.getDependsOn());
             response.setDependsOn(dependsOn);
         }
@@ -79,11 +84,14 @@ public class TaskServiceImpl implements TaskService{
         TaskEntity task = taskRepository.findById(taskEditDto.getId()).orElseThrow(
                 () -> new TaskNotFoundException("Task Not Found.")
         );
+        if(TaskStatus.DONE == task.getStatus()){
+            throw new TaskAlreadyCompletedException("Task is already completed.");
+        }
 
         taskUtil.checkCircularDependency(task,taskEditDto);
 
         taskMapper.updateEntity(taskEditDto, task);
-        if(null != taskEditDto.getDependsOn()){
+        if(task.hasDependency()){
             TaskEntity dependsOn = taskRepository.findById(taskEditDto.getDependsOn()).orElseThrow(
                     () -> new TaskNotFoundException("Parent Not Found.")
             );
@@ -97,6 +105,23 @@ public class TaskServiceImpl implements TaskService{
         return GlobalResponse.builder()
                 .id(task.getId())
                 .message("Task Edited Successfully.")
+                .build();
+    }
+
+    @Override
+    public GlobalResponse updateTaskStatus(UUID taskId) {
+        log.info("TaskServiceImpl || updateTaskStatus() || Updating Task, Id: {}", taskId);
+
+        TaskEntity task = taskRepository.findById(taskId).orElseThrow(
+                () -> new TaskNotFoundException("Task Not Found.")
+        );
+
+        taskUtil.changeTaskStatus(task);
+        log.info("TaskServiceImpl || updateTaskStatus() || Task has been updated, Id: {}", taskId);
+
+        return GlobalResponse.builder()
+                .id(task.getId())
+                .message("Status has been updated.")
                 .build();
     }
 }

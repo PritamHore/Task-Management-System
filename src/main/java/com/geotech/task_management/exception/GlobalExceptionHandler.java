@@ -30,4 +30,18 @@ public class GlobalExceptionHandler {
                 .body(exception.getMessage());
     }
 
+    @ExceptionHandler(DependentTaskNotCompletedException.class)
+    public ResponseEntity<String> handleDependentTaskNotCompletedException(DependentTaskNotCompletedException exception){
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(exception.getMessage());
+    }
+
+    @ExceptionHandler(TaskAlreadyCompletedException.class)
+    public ResponseEntity<String> handleTaskAlreadyCompletedException(TaskAlreadyCompletedException exception){
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(exception.getMessage());
+    }
+
 }
