@@ -4,7 +4,6 @@ import com.geotech.task_management.dto.GlobalResponse;
 import com.geotech.task_management.dto.TaskDto;
 import com.geotech.task_management.dto.TaskResponseDto;
 import com.geotech.task_management.service.TaskService;
-import com.geotech.task_management.util.TaskStatus;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
